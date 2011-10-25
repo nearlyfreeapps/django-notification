@@ -99,7 +99,7 @@ class NoticeSetting(models.Model):
         try:
             return cls._default_manager.get(user=user, notice_type=notice_type, medium=medium)
         except cls.DoesNotExist:
-            default = (NOTICE_MEDIA_DEFAULTS[medium] <= notice_type.default)
+            default = (NOTICE_MEDIA_DEFAULTS[str(medium)] <= notice_type.default)
             setting = cls(user=user, notice_type=notice_type, medium=medium, send=default)
             setting.save()
             return setting
@@ -109,7 +109,7 @@ def get_notification_setting(user, notice_type, medium):
     try:
         return NoticeSetting.objects.get(user=user, notice_type=notice_type, medium=medium)
     except NoticeSetting.DoesNotExist:
-        default = (NOTICE_MEDIA_DEFAULTS[medium] <= notice_type.default)
+        default = (NOTICE_MEDIA_DEFAULTS[str(medium)] <= notice_type.default)
         setting = NoticeSetting(user=user, notice_type=notice_type, medium=medium, send=default)
         setting.save()
         return setting
